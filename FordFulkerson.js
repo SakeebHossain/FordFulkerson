@@ -57,6 +57,13 @@ function Edge(nodeFrom, nodeTo, capacity) {
         console.log(false);
         return false;
     };
+
+    this.isConnectedTo = function(aNode) {
+        //returns true if the provided node is involved with anEdge
+        if (this.from.getID() == aNode.getID() || this.to.getID() == aNode.getID()) {
+            return true;
+        }; return false;
+    }
 };
 
 //DirectedGraph object----------------------------------------------------------------------------
@@ -103,6 +110,17 @@ function DirectedGraph() {
         this.nodes.push(newNode);
     };
 
+    this.getNeighbours = function(aNode) {
+        //finds all the nodes connected to aNode by an edge
+        var neighbours = [];
+        for (i = 0; i < this.edges.length; i++) {
+            if ((this.edges[i]).isConnectedTo(aNode)) {
+                neighbours.push(this.edges[i]);
+            };
+        };
+        return neighbours;
+    };
+
     this.deleteEdge = function(badEdge) {
         for (i = 0; i < this.edges.length; i++) {
             if (this.edges[i].matchesEdge(badEdge)) {
@@ -110,7 +128,8 @@ function DirectedGraph() {
                 return;
             };
         };
-        console.log("Specified edge not found...\n")
+        console.log("Edge", badEdge.id, "not found...\n");
+        return;
     };
 
 
@@ -118,16 +137,17 @@ function DirectedGraph() {
         for (i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i].matchesNode(badNode)) {
                 this.nodes.splice(i, 1);
-                return;
             };
+        }; 
+        //also delete all edges connecting to the badNode
+        var neighbours = this.getNeighbours(badNode);
+        for (j = 0; j < 2; j++) {
+            console.log('currently deleting edge', neighbours[j].id, j);
+            this.deleteEdge(neighbours[j]);
+            //break;
         };
-        //to-do: also delete all edges connecting to it
-        console.log("Specified node not found...\n")
     };
 
-    this.getNeighbours = function() {
-        //to-do
-    };
 
     this.getDetails = function () {
         
@@ -171,6 +191,12 @@ var t = new Edge(n3, n4, 1);
 // console.log(n1.getID(), n1.id);
 // console.log(q.getDetails());
 
+// // testing 
+// console.log("# TESTING Graph.isConnectedTo:\n");
+// console.log(q.isConnectedTo(n1));
+// console.log(q.isConnectedTo(n3));
+
+// console.log("# TESTING Edge.matchesEdge:\n");
 // q.matchesEdge(w)  //true
 // q.matchesEdge(e)  //false
 // q.matchesEdge(r)  //false
@@ -180,12 +206,20 @@ var t = new Edge(n3, n4, 1);
 // console.log(n1.matchesNode(n2))  //false
 
 //testing if DirectedGraph works with Node and Edge
-// var G = new DirectedGraph();
-// G.addNode(n1);
-// G.addNode(n2);
-// G.addNode(n3);
-// G.addEdge(q);
-// G.addEdge(t); 
+console.log("# INITIALIZING GRAPH:\n");
+var G = new DirectedGraph();
+G.addNode(n1);
+G.addNode(n2);
+G.addNode(n3);
+G.addEdge(q);
+G.addEdge(e); 
 // G.getDetails();
-// G.deleteNode(n2);
-// G.getDetails();
+// console.log('after deletion.........................');
+G.deleteNode(n1);
+G.getDetails();
+
+// console.log("# TESTING Graph.getNeighbours:\n");
+// var n = G.getNeighbours(n1);
+// for (i = 0; i < n.length; i++) {
+//     console.log(n[i].getDetails());
+// };
