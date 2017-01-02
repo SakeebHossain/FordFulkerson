@@ -50,11 +50,9 @@ function Edge(nodeFrom, nodeTo, capacity) {
         var otherTo = otherEdge.getTo();
         if (this.from.matchesNode(otherFrom)) {
             if (this.to.matchesNode(otherTo)) {
-                console.log(true);
                 return true;
             };
         };
-        console.log(false);
         return false;
     };
 
@@ -174,6 +172,39 @@ function DirectedGraph() {
     };
 };
 
+//Residual Graph Object----------------------------------------------------------------------------
+function ResidualGraph(G) {
+    this.nodes = [];
+    this.forwardEdges = [];
+    this.backwardEdges = [];
+    this.edges = [];
+
+    this.init = function() {
+        //add forward edges, and create and add backward edges
+        for (i = 0; i < G.edges.length; i++) {
+            this.forwardEdges.push(G.edges[i]);
+            be = this.convertToBackEdge(G.edges[i]);
+            this.backwardEdges.push(be);
+            this.edges.push(G.edges[i]);
+            this.edges.push(be);
+        };
+        
+        //add nodes
+        for (i = 0; i < G.nodes.length; i++) {
+            this.nodes.push(G.nodes[i]);
+        };
+    };
+
+    this.convertToBackEdge = function(anEdge) {
+        var reversedEdge = new Edge(anEdge.getTo(), anEdge.getFrom(), 0);
+        return reversedEdge; 
+    };
+
+    this.init();    
+};
+
+ResidualGraph.prototype = new DirectedGraph();
+
 //-------------------------------------------------------------------------------------------------
 //TESTS--------------------------------------------------------------------------------------------
 // //testing if Node and Edge work together, and their methods
@@ -206,7 +237,7 @@ var t = new Edge(n3, n4, 1);
 // console.log(n1.matchesNode(n2))  //false
 
 //testing if DirectedGraph works with Node and Edge
-console.log("# INITIALIZING GRAPH:\n");
+// console.log("# INITIALIZING GRAPH:\n");
 var G = new DirectedGraph();
 G.addNode(n1);
 G.addNode(n2);
@@ -215,11 +246,14 @@ G.addEdge(q);
 G.addEdge(e); 
 // G.getDetails();
 // console.log('after deletion.........................');
-G.deleteNode(n1);
-G.getDetails();
+// G.deleteNode(n1);
+// G.getDetails();
 
 // console.log("# TESTING Graph.getNeighbours:\n");
 // var n = G.getNeighbours(n1);
 // for (i = 0; i < n.length; i++) {
 //     console.log(n[i].getDetails());
 // };
+
+var x = new ResidualGraph(G);
+console.log(x.getNeighbours(n1));
