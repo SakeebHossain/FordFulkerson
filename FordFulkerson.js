@@ -1,3 +1,42 @@
+//Graph (using Adjacency matrix)------------------------------------------------------------------
+function Graph() {
+    ////METHODS
+    this.adjMatrix = [];  //[i][j] : i is the name of the 'from' node and j is the 'to' node
+    this.idList = [];
+
+    //addNode(id)
+    /*
+    -must provide an id (basically, the name)
+    -add new row (append new list) and column (go through each row in matrix, append -inf) to matrix
+    -append id to idList
+    */
+
+    //deleteNode(id)
+    /*
+    -find its index in the idList, i
+    -remove ith row in adjMatrix
+    -splice out ith element from all other arrays
+    */
+
+    //addEdge(id1, id2)
+    /*
+    -from node (id1) and to node (id2)
+    -confirm if id1 and id2 are found in idList, confirming nodes are in graph
+    -find index of id1, i, and id2, j, in idList
+    -update adjMatrix[i][j]
+    */
+
+    //deleteEdge(id1, id2)
+    /*
+    -same 'from', 'to' thing
+    -set adjMatrix to -inf
+    */
+
+    //print
+    /*
+    -print very row of adjMatrix
+    */
+};
 //Node object-------------------------------------------------------------------------------------
 
 function Node(id) {
@@ -13,7 +52,7 @@ function Node(id) {
         }
         return false;
 
-    }; TEST
+    };
 };
 
 //Edge object-------------------------------------------------------------------------------------
@@ -207,43 +246,13 @@ ResidualGraph.prototype = new DirectedGraph();
 
 //-------------------------------------------------------------------------------------------------
 //TESTS--------------------------------------------------------------------------------------------
-// //testing if Node and Edge work together, and their methods
-var n1 = new Node('n1');
-var n2 = new Node('n2');
-var n3 = new Node('n3');
-var n4 = new Node('n4');
-var n5 = new Node('n1');
-var q = new Edge(n1, n2, 1);
-var w = new Edge(n1, n2, 1);
-var e = new Edge(n1, n3, 1);
-var r = new Edge(n3, n2, 1);
-var t = new Edge(n3, n4, 1);
-
-// console.log(n1.getID(), n1.id);
-// console.log(q.getDetails());
-
-// // testing 
-// console.log("# TESTING Graph.isConnectedTo:\n");
-// console.log(q.isConnectedTo(n1));
-// console.log(q.isConnectedTo(n3));
-
-// console.log("# TESTING Edge.matchesEdge:\n");
-// q.matchesEdge(w)  //true
-// q.matchesEdge(e)  //false
-// q.matchesEdge(r)  //false
-// q.matchesEdge(t)  //false
-
-// console.log(n1.matchesNode(n5))  //true
-// console.log(n1.matchesNode(n2))  //false
-
-//testing if DirectedGraph works with Node and Edge
 // console.log("# INITIALIZING GRAPH:\n");
-var G = new DirectedGraph();
-G.addNode(n1);
-G.addNode(n2);
-G.addNode(n3);
-G.addEdge(q);
-G.addEdge(e); 
+// var G = new DirectedGraph();
+// G.addNode(n1);
+// G.addNode(n2);
+// G.addNode(n3);
+// G.addEdge(q);
+// G.addEdge(e); 
 // G.getDetails();
 // console.log('after deletion.........................');
 // G.deleteNode(n1);
@@ -255,5 +264,5 @@ G.addEdge(e);
 //     console.log(n[i].getDetails());
 // };
 
-var x = new ResidualGraph(G);
-console.log(x.getNeighbours(n1));
+// var x = new ResidualGraph(G);
+// console.log(x.getNeighbours(n1));
