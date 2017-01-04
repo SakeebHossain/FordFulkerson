@@ -4,15 +4,32 @@ function Graph() {
     this.adjMatrix = [];  //[i][j] : i is the name of the 'from' node and j is the 'to' node
     this.idList = [];
 
-    //addNode(id)
-    /*
-    -must provide an id (basically, the name)
-    -add new row (append new list) and column (go through each row in matrix, append -inf) to matrix
-    -append id to idList
-    */
+    this.addNode = function(id) {
+        //make sure id is unique
+        for (i = 0; i < idList.length; i++) {
+            if (idList[i] == id) {
+                console.log("A node with id", id, "already exists!");
+                return;
+            };
+        };
+        //initialize new row with -inf's based on len of idlist
+        var newRow = [];
+        for (i = 0; i < idList.length; i++) {
+            newRow[i].append(-Infinity);
+        };
+        //add new row (append new list)
+        this.adjMatrix.push(newRow);
+        //add new id to idList
+        this.idList.push(id);
+        //add new columns in each row (go through each row in matrix, append -inf) to matrix
+        for (i = 0; i < idList.length; i++) {
+            this.adjMatrix[i].push(-Infinity);
+        };
+    };
 
     //deleteNode(id)
     /*
+    -confirm node exists
     -find its index in the idList, i
     -remove ith row in adjMatrix
     -splice out ith element from all other arrays
