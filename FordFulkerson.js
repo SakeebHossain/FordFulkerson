@@ -236,6 +236,7 @@ function getPath(pred, src, dest) {
 
 //Residual Graph-----------------------------------------------------------------------------------
 
+ResidualGraph.prototype = new Graph();
 function ResidualGraph(G) {
 
     //NOTE : .slice() is a way of "copying" arrays. Otherwise changes to resMatrix affect G.adjMatrix
@@ -254,9 +255,6 @@ function ResidualGraph(G) {
 
     this.init(G);
 };
-
-
-ResidualGraph.prototype = new Graph();
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
 function FordFulkerson(G, src, dest) {
@@ -303,4 +301,7 @@ G.addEdge("E", "F", 3);
 // console.log(BFS(G, "A", "F"));
 
 // Testing Residual Graph
+G.print();
 RG = new ResidualGraph(G);
+//RG.print();
+G.print();
