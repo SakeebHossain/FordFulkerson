@@ -204,17 +204,19 @@ function BFS(G, src, destination) {
             continue;
         };
 
-        for (var neighbour in G.getNeighbours(current)) {
-            pred[neighbour] = current;
-            dist[neighbour] = dist[current] + 1;
+        var neighbours = G.getNeighbours(current);
+        for (i = 0; i < neighbours.length; i++) {
+            pred[neighbours[i]] = current;
+            dist[neighbours[i]] = dist[current] + 1;
 
-            if (neighbour == destination) {
-                return {"path" : getPath(pred, src, destination),
-                        "dist" : dist[destination]
+            if (neighbours[i] == destination) {
+                return {
+                    "path" : getPath(pred, src, destination),
+                    "dist" : dist[destination]
                     };
             };
 
-            Q.enqueue(neighbour);
+            Q.enqueue(neighbours[i]);
         };
     };
 };
@@ -224,7 +226,7 @@ function getPath(pred, src, dest) {
     path = [];
     while (current != undefined) {
         path.unshift(current);
-        current = prev[current];
+        current = pred[current];
     }
     return path;
 };
