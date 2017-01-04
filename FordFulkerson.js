@@ -181,8 +181,52 @@ function Queue() {
     };
 
 //Breadth First Search-----------------------------------------------------------------------------
-function BFS() {
-    //
+/* BREADTH FIRST SEARCH */
+function BFS(G, src, destination) {
+    
+    pred = {};
+    dist = {};
+    Q = new Queue();
+
+    for (var node in G.idList) {
+        pred[i] = undefined;
+        dist[i] = Infinity;
+    }
+
+    Q.enqueue(src);
+    dist[src] = 0; 
+
+    while(Q.isEmpty() == false) {
+        var current = Q.dequeue();
+        console.log("DEBUGGING:", current, Q.getContents());
+
+        if (G.getNeighbours(current) == undefined) {
+            continue;
+        };
+
+        for (var neighbour in G.getNeighbours(current)) {
+            pred[neighbour] = current;
+            dist[neighbour] = dist[current] + 1;
+
+            if (neighbour == destination) {
+                return {"path" : getPath(pred, src, destination),
+                        "dist" : dist[destination]
+                    };
+            };
+
+            Q.enqueue(neighbour);
+        };
+    };
+};
+
+function getPath(pred, src, dest) {
+    var current = dest;
+    path = [];
+    while (current != undefined) {
+        path.unshift(current);
+        current = prev[current];
+    }
+    return path;
 };
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
@@ -194,19 +238,34 @@ var G = new Graph();
 G.addNode("A");
 G.addNode("B");
 G.addNode("C");
+G.addNode("D");
+G.addNode("E");
+G.addNode("F");
 // G.addNode("B"); //should fail
 // G.print();
 
 // // Testing Graph.deleteNode
 // G.deleteNode("node2");
-G.addEdge("A", "B", 4);
-G.addEdge("A", "C", 3);
-G.addEdge("B", "A", 1);
+// G.addEdge("A", "B", 4);
+// G.addEdge("A", "C", 3);
+// G.addEdge("B", "A", 1);
+G.addEdge("A", "B", 3);
+G.addEdge("A", "C", 2);
+G.addEdge("B", "C", 2);
+G.addEdge("B", "D", 6);
+G.addEdge("B", "E", 1);
+G.addEdge("C", "E", 7);
+G.addEdge("D", "F", 4);
+G.addEdge("E", "D", 8);
+G.addEdge("E", "F", 3);
 G.print();
 
 // // Testing Graph.addEdge
 // G.addEdge("node2", "node4", 10);
 // G.print();
 
-// // Testing Graph.deleteEdge
-// console.log(G.getNeighbours("B"));
+// Testing Graph.getNeighbours
+// console.log(G.getNeighbours("F"));
+
+// Testing BFS
+console.log(BFS(G, "A", "F"));

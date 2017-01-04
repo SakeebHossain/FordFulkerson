@@ -13,7 +13,7 @@ function breadthFirstSearch(G, src, destination) {
 	Q.enqueue(src);
 	dist[src] = 0; 
 
-	while(!Q.isEmpty()) {
+	while(Q.isEmpty() == false) {
 		var current = Q.dequeue();
 
 		if (G.neighbours(current) == undefined) {
