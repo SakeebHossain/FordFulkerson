@@ -237,19 +237,26 @@ function getPath(pred, src, dest) {
 //Residual Graph-----------------------------------------------------------------------------------
 
 function ResidualGraph(G) {
+
+    //NOTE : .slice() is a way of "copying" arrays. Otherwise changes to resMatrix affect G.adjMatrix
+    this.adjMatrix = G.adjMatrix.slice(); 
+    this.idList = G.idList.slice();
     
-    function init(G) {
+    this.init = function(G) {
         for (i = 0; i < G.adjMatrix.length; i++) {
             for (j = 0; j < G.adjMatrix[i].length; j++) {
-                if (i != j && G.adjMatrix[i][j] != -Infinity && G.adjMatrix[i][j] == -Infinity) {
-                    this.adjMatrix 
-                }
-            }
-        }
-    }
+                if (i != j && G.adjMatrix[i][j] != -Infinity) {
+                    this.adjMatrix[j][i] = 0;  //question:... what about .updateEdge()?
+                };
+            };
+        };
+    };
 
-    init();
+    this.init(G);
 };
+
+
+ResidualGraph.prototype = new Graph();
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
 function FordFulkerson(G, src, dest) {
@@ -283,7 +290,7 @@ G.addEdge("C", "E", 1);
 G.addEdge("D", "F", 4);
 G.addEdge("E", "D", 8);
 G.addEdge("E", "F", 3);
-G.print();
+// G.print();
 
 // // Testing Graph.addEdge
 // G.addEdge("node2", "node4", 10);
@@ -292,5 +299,8 @@ G.print();
 // Testing Graph.getNeighbours
 // console.log(G.getNeighbours("F"));
 
-// Testing BFS
-console.log(BFS(G, "A", "F"));
+// // Testing BFS
+// console.log(BFS(G, "A", "F"));
+
+// Testing Residual Graph
+RG = new ResidualGraph(G);
