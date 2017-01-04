@@ -35,6 +35,7 @@ function Graph() {
         for (i = 0; i < this.idList.length; i++) {
             if (this.idList[i] == id) {
                     found = true;
+                    index = i;
                     break;
                 };
         };
@@ -52,13 +53,13 @@ function Graph() {
             }
         };
 
-        //splice out the kth element in idList
+        //splice out the [index]th element in idList
         this.idList.splice(index, 1);
 
-        //splice out the kth row in adjMatrix
+        //splice out the [index]th row in adjMatrix
         this.adjMatrix.splice(index, 1);
 
-        //splice out kth element from all other arrays
+        //splice out [index]th element from all other arrays
         for (i = 0; i < this.adjMatrix.length; i++) {
             this.adjMatrix[i].splice(index, 1);
         };
@@ -133,6 +134,7 @@ function Graph() {
         for (i = 0; i < this.idList.length; i++) {
             if (this.idList[i] == id) {
                     found = true;
+                    index = i;
                     break;
                 };
         };
@@ -143,29 +145,36 @@ function Graph() {
         };
 
         neighbours = [];
-        for (i = 0; i < adjMatrix[index]; i++) {
-            if (adjMatrix != -Infinity) {
-                neighbours.push(adjMatrix[index][i]);
+        for (i = 0; i < this.adjMatrix[index].length; i++) {
+            if (this.adjMatrix[index][i] != -Infinity) {
+                neighbours.push(this.idList[i]);
             };
         };
+        return neighbours;
     };
 };
 
 //-------------------------------------------------------------------------------------------------
 //TESTS--------------------------------------------------------------------------------------------
 var G = new Graph();
-//Testing Graph.addNode
-G.addNode("node1");
-G.addNode("node2");
-G.addNode("node3");
-// G.addNode("node2"); //should fail
-G.print();
-// //Testing Graph.deleteNode
-// G.deleteNode("node2");
-// G.addEdge("node1", "node3");
+
+// // Testing Graph.addNode
+G.addNode("A");
+G.addNode("B");
+G.addNode("C");
+// G.addNode("B"); //should fail
 // G.print();
 
-// // Testing Graph.addEdge
-G.addEdge("node2", "node4", 10);
+// // Testing Graph.deleteNode
+// G.deleteNode("node2");
+G.addEdge("A", "B", 4);
+G.addEdge("A", "C", 3);
+G.addEdge("B", "A", 1);
 G.print();
+
+// // Testing Graph.addEdge
+// G.addEdge("node2", "node4", 10);
+// G.print();
+
 // // Testing Graph.deleteEdge
+// console.log(G.getNeighbours("B"));
