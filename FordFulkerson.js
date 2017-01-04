@@ -67,7 +67,6 @@ function Graph() {
 
     this.addEdge = function(id1, id2, weight) {
     //NOTE: id1 is the 'from' node and id2 is the 'to' node
-    //NOTE: use this method to "update" edge weights as well
     //confirm if id1 and id2 are found in idList, confirming nodes are in graph
     //also find index of id1, i, and id2, j, in idList
         found1 = false;
@@ -85,6 +84,11 @@ function Graph() {
             return;
         };
         this.adjMatrix[index1][index2] = weight;
+    };
+
+    this.updateEdge = function(id1, id2, newWeight) {
+        //NOTE : this method is the same as addEdge. Only added it for readability
+        addEdge(id1, id2, newWeight);
     };
 
     this.deleteEdge = function(id1, id2) {
@@ -181,7 +185,6 @@ function Queue() {
     };
 
 //Breadth First Search-----------------------------------------------------------------------------
-/* BREADTH FIRST SEARCH */
 function BFS(G, src, destination) {
     
     pred = {};
@@ -198,7 +201,6 @@ function BFS(G, src, destination) {
 
     while(Q.isEmpty() == false) {
         var current = Q.dequeue();
-        console.log("DEBUGGING:", current, Q.getContents());
 
         if (G.getNeighbours(current) == undefined) {
             continue;
@@ -219,6 +221,7 @@ function BFS(G, src, destination) {
             Q.enqueue(neighbours[i]);
         };
     };
+    return {};
 };
 
 function getPath(pred, src, dest) {
@@ -231,7 +234,27 @@ function getPath(pred, src, dest) {
     return path;
 };
 
+//Residual Graph-----------------------------------------------------------------------------------
+
+function ResidualGraph(G) {
+    
+    function init(G) {
+        for (i = 0; i < G.adjMatrix.length; i++) {
+            for (j = 0; j < G.adjMatrix[i].length; j++) {
+                if (i != j && G.adjMatrix[i][j] != -Infinity && G.adjMatrix[i][j] == -Infinity) {
+                    this.adjMatrix 
+                }
+            }
+        }
+    }
+
+    init();
+};
+
 //Ford-Fulkerson-----------------------------------------------------------------------------------
+function FordFulkerson(G, src, dest) {
+
+}; 
 
 //TESTS--------------------------------------------------------------------------------------------
 var G = new Graph();
@@ -251,12 +274,12 @@ G.addNode("F");
 // G.addEdge("A", "B", 4);
 // G.addEdge("A", "C", 3);
 // G.addEdge("B", "A", 1);
-G.addEdge("A", "B", 3);
-G.addEdge("A", "C", 2);
-G.addEdge("B", "C", 2);
+G.addEdge("A", "B", 1);
+G.addEdge("A", "C", 8);
+G.addEdge("B", "C", 1);
 G.addEdge("B", "D", 6);
 G.addEdge("B", "E", 1);
-G.addEdge("C", "E", 7);
+G.addEdge("C", "E", 1);
 G.addEdge("D", "F", 4);
 G.addEdge("E", "D", 8);
 G.addEdge("E", "F", 3);
