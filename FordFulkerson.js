@@ -67,6 +67,7 @@ function Graph() {
 
     this.addEdge = function(id1, id2, weight) {
     //NOTE: id1 is the 'from' node and id2 is the 'to' node
+    //NOTE: use this method to "update" edge weights as well
     //confirm if id1 and id2 are found in idList, confirming nodes are in graph
     //also find index of id1, i, and id2, j, in idList
         found1 = false;
@@ -85,8 +86,6 @@ function Graph() {
         };
         this.adjMatrix[index1][index2] = weight;
     };
-
-    //deleteEdge(id1, id2) delete ()id2, 
 
     this.deleteEdge = function(id1, id2) {
     //NOTE: id1 is the 'from' node and id2 is the 'to' node
@@ -108,8 +107,6 @@ function Graph() {
         };
         this.adjMatrix[index1][index2] = -Infinity;
     };
-
-
         
     this.print = function() {
         console.log("FROM\\TO", this.idList);
@@ -121,11 +118,8 @@ function Graph() {
 
     //getedges() : returns a list of edges in the format (from, to)
 
-
-    //updateEdge() : change the weight of an edge that already exiss
-
     this.getNeighbours = function(id) {
-        //description: returns all nodes reachable from the provided node
+        //description : returns all nodes reachable from the provided node
         //find index of id in idList 
         var found = false;
         var index;
@@ -138,12 +132,15 @@ function Graph() {
                     break;
                 };
         };
+        
 
+        //if it doesn't exist, tell 'em
         if (found == false) {
             console.log("The node with id", id, "wasn't found.");
             return;
         };
 
+        //make array of neighbours
         neighbours = [];
         for (i = 0; i < this.adjMatrix[index].length; i++) {
             if (this.adjMatrix[index][i] != -Infinity) {
@@ -154,7 +151,42 @@ function Graph() {
     };
 };
 
-//-------------------------------------------------------------------------------------------------
+//Queue--------------------------------------------------------------------------------------------
+function Queue() {
+        var queue = [];
+        
+        this.dequeue = function() {
+            if (queue.length == 0) {
+                return undefined;
+            } else {
+                return queue.shift();
+            }
+        };
+        
+        this.enqueue = function(item) {
+            queue.push(item);
+        };
+
+        this.getLength = function() {
+            return queue.length;
+        };
+
+        this.isEmpty = function() {
+            return (queue.length == 0);
+        };
+
+        this.getContents = function() {
+            return queue;
+        };
+    };
+
+//Breadth First Search-----------------------------------------------------------------------------
+function BFS() {
+    //
+};
+
+//Ford-Fulkerson-----------------------------------------------------------------------------------
+
 //TESTS--------------------------------------------------------------------------------------------
 var G = new Graph();
 
