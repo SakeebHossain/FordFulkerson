@@ -1,2 +1,2 @@
 # FordFulkerson
-An implementation of the Ford-Fukerson algorithm. 
+An implementation of the Ford-Fulkerson algorithm. 
