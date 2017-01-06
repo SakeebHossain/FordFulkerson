@@ -3,8 +3,9 @@ function Graph() {
     ////METHODS
     this.adjMatrix = [];  //[i][j] : i is the name of the 'from' node and j is the 'to' node
     this.idList = [];
+};
 
-    this.addNode = function(id) {
+    Graph.prototype.addNode = function(id) {
         //make sure id is unique
         for (i = 0; i < this.idList.length; i++) {
             if (this.idList[i] == id) {
@@ -27,7 +28,7 @@ function Graph() {
         };
     };
 
-    this.deleteNode = function(id) {
+    Graph.prototype.deleteNode = function(id) {
         var found = false;
         var index;
 
@@ -65,7 +66,7 @@ function Graph() {
         };
     };
 
-    this.addEdge = function(id1, id2, weight) {
+    Graph.prototype.addEdge = function(id1, id2, weight) {
     //NOTE: id1 is the 'from' node and id2 is the 'to' node
     //confirm if id1 and id2 are found in idList, confirming nodes are in graph
     //also find index of id1, i, and id2, j, in idList
@@ -86,12 +87,12 @@ function Graph() {
         this.adjMatrix[index1][index2] = weight;
     };
 
-    this.updateEdge = function(id1, id2, newWeight) {
+    Graph.prototype.updateEdge = function(id1, id2, newWeight) {
         //NOTE : this method is the same as addEdge. Only added it for readability
         addEdge(id1, id2, newWeight);
     };
 
-    this.deleteEdge = function(id1, id2) {
+    Graph.prototype.deleteEdge = function(id1, id2) {
     //NOTE: id1 is the 'from' node and id2 is the 'to' node
     //confirm if id1 and id2 are found in idList, confirming nodes are in graph
     //also find index of id1, i, and id2, j, in idList
@@ -112,7 +113,7 @@ function Graph() {
         this.adjMatrix[index1][index2] = -Infinity;
     };
         
-    this.print = function() {
+    Graph.prototype.print = function() {
         console.log("FROM\\TO", this.idList);
         for (i = 0; i < this.adjMatrix.length; i++) {
             console.log("'" + this.idList[i] + "'", this.adjMatrix[i], "\n");
@@ -122,7 +123,7 @@ function Graph() {
 
     //getedges() : returns a list of edges in the format (from, to)
 
-    this.getNeighbours = function(id) {
+    Graph.prototype.getNeighbours = function(id) {
         //description : returns all nodes reachable from the provided node
         //find index of id in idList 
         var found = false;
