@@ -148,7 +148,7 @@ function Graph() {
         //make array of neighbours
         neighbours = [];
         for (i = 0; i < this.adjMatrix[index].length; i++) {
-            if (this.adjMatrix[index][i] != -Infinity) {
+            if (this.adjMatrix[index][i] != -Infinity && this.adjMatrix[index][i] != 0) {  //if edge cap is 0, it can't carry flow, so it might as well not exist...
                 neighbours.push(this.idList[i]);
             };
         };
@@ -217,9 +217,9 @@ function BFS(G, src, destination) {
                     "dist" : dist[destination]
                     };
             };
-
             Q.enqueue(neighbours[i]);
         };
+        console.log(Q.getContents());
     };
     return {};
 };
@@ -230,7 +230,7 @@ function getPath(pred, src, dest) {
     while (current != undefined) {
         path.unshift(current);
         current = pred[current];
-    }
+    };
     return path;
 };
 
@@ -239,8 +239,6 @@ function getPath(pred, src, dest) {
 ResidualGraph.prototype = new Graph();
 
 function ResidualGraph(G) {
-
-    //NOTE : .slice() is a way of "copying" arrays. Otherwise changes to resMatrix affect G.adjMatrix
 
     this.adjMatrix = [];
     this.idList = [];
@@ -265,12 +263,18 @@ function ResidualGraph(G) {
             };
         };
     };
-
-    this.init(G);
+    this.init(G);  //run the init on creation of an instance!
 };
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
 function FordFulkerson(G, src, dest) {
+
+    // var RS = ResidualGraph(G);
+
+    // while(path exists):
+    //     p = RG.getPath()
+    //     min = p.min()
+    //     RG.adjust(p, min) ---> if edge is not forward edge, incrase, else decrease
 
 }; 
 
@@ -284,6 +288,7 @@ G.addNode("C");
 G.addNode("D");
 G.addNode("E");
 G.addNode("F");
+G.addNode("G");
 // G.addNode("B"); //should fail
 // G.print();
 
@@ -308,7 +313,7 @@ G.addEdge("E", "F", 3);
 // G.print();
 
 // Testing Graph.getNeighbours
-// console.log(G.getNeighbours("F"));
+// console.log(G.getNeighbours("A"));
 
 // // Testing BFS
 // console.log(BFS(G, "A", "F"));
@@ -316,5 +321,6 @@ G.addEdge("E", "F", 3);
 // Testing Residual Graph
 // G.print();
 RG = new ResidualGraph(G);
-RG.print();
-G.print();
+// RG.print();
+// G.print();
+console.log(BFS(RG, "A", "G"));
