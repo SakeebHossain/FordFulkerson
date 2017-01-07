@@ -154,7 +154,6 @@ function Graph() {
         };
         return neighbours;
     };
-};
 
 //Queue--------------------------------------------------------------------------------------------
 function Queue() {
@@ -238,13 +237,26 @@ function getPath(pred, src, dest) {
 //Residual Graph-----------------------------------------------------------------------------------
 
 ResidualGraph.prototype = new Graph();
+
 function ResidualGraph(G) {
 
     //NOTE : .slice() is a way of "copying" arrays. Otherwise changes to resMatrix affect G.adjMatrix
-    this.adjMatrix = G.adjMatrix.slice(); 
-    this.idList = G.idList.slice();
+
+    this.adjMatrix = [];
+    this.idList = [];
     
     this.init = function(G) {
+        //deep cloning the adjMatrix and idList
+        for (i = 0; i < G.adjMatrix.length; i++) {
+            row = [];
+            for (j = 0; j < G.adjMatrix[i].length; j++) {
+                row.push(G.adjMatrix[i][j]);
+            };
+            this.adjMatrix.push(row);
+            this.idList.push(G.idList[i]);
+        };
+
+        //adding the residual edges
         for (i = 0; i < G.adjMatrix.length; i++) {
             for (j = 0; j < G.adjMatrix[i].length; j++) {
                 if (i != j && G.adjMatrix[i][j] != -Infinity) {
@@ -302,7 +314,7 @@ G.addEdge("E", "F", 3);
 // console.log(BFS(G, "A", "F"));
 
 // Testing Residual Graph
-G.print();
+// G.print();
 RG = new ResidualGraph(G);
-//RG.print();
+RG.print();
 G.print();
