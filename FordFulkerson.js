@@ -308,18 +308,18 @@ G.addEdge("E", "D", 8);
 G.addEdge("E", "F", 3);
 // G.print();
 
-// // Testing Graph.addEdge
-// G.addEdge("node2", "node4", 10);
-// G.print();
+// Testing Graph.addEdge
+G.addEdge("node2", "node4", 10);
+G.print();
 
-// Testing Graph.getNeighbours
-// console.log(G.getNeighbours("A"));
+Testing Graph.getNeighbours
+console.log(G.getNeighbours("A"));
 
-// // Testing BFS
-// console.log(BFS(G, "A", "F"));
+// Testing BFS
+console.log(BFS(G, "A", "F"));
 
-// Testing Residual Graph
-// G.print();
+Testing Residual Graph
+G.print();
 RG = new ResidualGraph(G);
 // RG.print();
 // G.print();
