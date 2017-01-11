@@ -295,7 +295,7 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        console.log('found min to be', min);
+        //console.log('found min to be', min);
         return min;
     };
 
@@ -303,12 +303,13 @@ function ResidualGraph(G) {
         //adds val to each edge on path
 
         //iterate through the path
-        for (i = 1; i < path.length; i++) {
-            from = this.getIdIndex(path[i-1]);
-            to = this.getIdIndex(path[i]);
+        for (j = 1; i < path.length; j++) {
+            from = this.getIdIndex(path[j-1]);
+            to = this.getIdIndex(path[j]);
             if (from == undefined || to == undefined) {console.log('something went wrong...'); return;};
             currentVal = this.adjMatrix[from][to];
-            this.adjMatrix[from][to] = this.adjMatrix[from][to] + val;
+            this.adjMatrix[from][to] = this.adjMatrix[from][to] - val;
+            this.adjMatrix[to][from] = this.adjMatrix[to][from] + val;
         };
     };
 };
@@ -316,20 +317,21 @@ function ResidualGraph(G) {
 //Ford-Fulkerson-----------------------------------------------------------------------------------
 function FordFulkerson(G, src, sink) {
 
-    var RS = ResidualGraph(G);
+    var RS = new ResidualGraph(G);
 
-    for (k = 0; k < 2; k++) {
+    for (k = 0; k < 10; k++) {
         path = BFS(RG, src, sink)['path'];
+        console.log(path);
 
         if (path == {}) {
-            this.print();
+            console.log("I blieve");
             break;
         };
 
         //find min
-        console.log('FF found this path:',path);
+        //console.log('FF found this path:',path);
         var min = RG.minCapacity(path);
-        RG.adjustEdgesInPath(path, min);
+        RS.adjustEdgesInPath(path, min);
     };
     //     p = RG.getPath()
     //     min = p.min()
@@ -347,7 +349,6 @@ G.addNode("C");
 G.addNode("D");
 G.addNode("E");
 G.addNode("F");
-G.addNode("G");
 // G.addNode("B"); //should fail
 // G.print();
 
