@@ -123,6 +123,16 @@ function Graph() {
 
     //getedges() : returns a list of edges in the format (from, to)
 
+    Graph.prototype.getIdIndex = function(id) {
+        for (i = 0; i < this.idList.length; i++) {
+            if (id == this.idList[i]) {
+                return i;
+            };
+        };
+        console.log("node with id", id, "doesn't exist in this graph.");
+        return undefined;
+    };
+
     Graph.prototype.getNeighbours = function(id) {
         //description : returns all nodes reachable from the provided node
         //find index of id in idList 
@@ -288,6 +298,19 @@ function ResidualGraph(G) {
         console.log('found min to be', min);
         return min;
     };
+
+    this.adjustEdgesInPath = function(path, val) {
+        //adds val to each edge on path
+
+        //iterate through the path
+        for (i = 1; i < path.length; i++) {
+            from = this.getIdIndex(path[i-1]);
+            to = this.getIdIndex(path[i]);
+            if (from == undefined || to == undefined) {console.log('something went wrong...'); return;};
+            currentVal = this.adjMatrix[from][to];
+            this.adjMatrix[from][to] = this.adjMatrix[from][to] + val;
+        };
+    };
 };
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
@@ -306,28 +329,8 @@ function FordFulkerson(G, src, sink) {
         //find min
         console.log('FF found this path:',path);
         var min = RG.minCapacity(path);
-
-        //update path capacities
-        for (i = 1; i < path.length; i++) {
-            console.log(i);
-            from = path[i-1];
-            to = path[i];
-            var fromIndex;
-            var toIndex;
-            for (j = 0; j < this.idList.length; j++) {
-                if (this.idList[j] == from) {
-                    fromIndex = j;
-                };
-                if (this.idList[j] == to) {
-                    toIndex = j;
-                };
-            };
-            RG.updateEdge(from, to, this.adjMatrix[fromIndex][toIndex] - min);
-            RG.updateEdge(to, from, this.adjMatrix[toIndex][fromIndex] + min);
-            
-        };
+        RG.adjustEdgesInPath(path, min);
     };
-
     //     p = RG.getPath()
     //     min = p.min()
     //     RG.adjust(p, min) ---> if edge is not forward edge, incrase, else decrease
