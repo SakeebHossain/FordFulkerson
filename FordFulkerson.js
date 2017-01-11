@@ -89,7 +89,7 @@ function Graph() {
 
     Graph.prototype.updateEdge = function(id1, id2, newWeight) {
         //NOTE : this method is the same as addEdge. Only added it for readability
-        addEdge(id1, id2, newWeight);
+        this.addEdge(id1, id2, newWeight);
     };
 
     Graph.prototype.deleteEdge = function(id1, id2) {
@@ -219,7 +219,7 @@ function BFS(G, src, destination) {
             };
             Q.enqueue(neighbours[i]);
         };
-        console.log(Q.getContents());
+        //console.log(Q.getContents());
     };
     return {};
 };
@@ -264,14 +264,70 @@ function ResidualGraph(G) {
         };
     };
     this.init(G);  //run the init on creation of an instance!
+
+    this.minCapacity = function(path) {
+        var min = Infinity;
+        for (i = 1; i < path.length; i++) {
+            from = path[i-1];
+            to = path[i];
+            var fromIndex;
+            var toIndex;
+            for (j = 0; j < this.idList.length; j++) {
+                if (this.idList[j] == from) {
+                    fromIndex = j;
+                };
+                if (this.idList[j] == to) {
+                    toIndex = j;
+                };
+            };
+            value = this.adjMatrix[fromIndex][toIndex];
+            if (value < min) {
+                min = value;
+            };
+        };
+        console.log('found min to be', min);
+        return min;
+    };
 };
 
 //Ford-Fulkerson-----------------------------------------------------------------------------------
-function FordFulkerson(G, src, dest) {
+function FordFulkerson(G, src, sink) {
 
-    // var RS = ResidualGraph(G);
+    var RS = ResidualGraph(G);
 
-    // while(path exists):
+    for (k = 0; k < 2; k++) {
+        path = BFS(RG, src, sink)['path'];
+
+        if (path == {}) {
+            this.print();
+            break;
+        };
+
+        //find min
+        console.log('FF found this path:',path);
+        var min = RG.minCapacity(path);
+
+        //update path capacities
+        for (i = 1; i < path.length; i++) {
+            console.log(i);
+            from = path[i-1];
+            to = path[i];
+            var fromIndex;
+            var toIndex;
+            for (j = 0; j < this.idList.length; j++) {
+                if (this.idList[j] == from) {
+                    fromIndex = j;
+                };
+                if (this.idList[j] == to) {
+                    toIndex = j;
+                };
+            };
+            RG.updateEdge(from, to, this.adjMatrix[fromIndex][toIndex] - min);
+            RG.updateEdge(to, from, this.adjMatrix[toIndex][fromIndex] + min);
+            
+        };
+    };
+
     //     p = RG.getPath()
     //     min = p.min()
     //     RG.adjust(p, min) ---> if edge is not forward edge, incrase, else decrease
@@ -309,18 +365,20 @@ G.addEdge("E", "F", 3);
 // G.print();
 
 // Testing Graph.addEdge
-G.addEdge("node2", "node4", 10);
-G.print();
+// G.addEdge("node2", "node4", 10);
+// G.print();
 
-Testing Graph.getNeighbours
-console.log(G.getNeighbours("A"));
+// Testing Graph.getNeighbours
+// console.log(G.getNeighbours("A"));
 
-// Testing BFS
-console.log(BFS(G, "A", "F"));
+// // Testing BFS
+// console.log(BFS(G, "A", "F"));
 
-Testing Residual Graph
-G.print();
+// Testing Residual Graph
+// G.print();
 RG = new ResidualGraph(G);
 // RG.print();
 // G.print();
-console.log(BFS(RG, "A", "G"));
+// x = BFS(RG, "A", "F");
+// console.log(RG.getNeighbours("B"));
+FordFulkerson(RG, 'A', 'F');
