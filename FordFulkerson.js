@@ -208,8 +208,11 @@ function BFS(G, src, destination) {
 
     Q.enqueue(src);
     dist[src] = 0; 
-
+    count = 0
     while(Q.isEmpty() == false) {
+        console.log(Q.getContents());
+        count += 1
+        if (count == 15) {return;};
         var current = Q.dequeue();
 
         if (G.getNeighbours(current) == undefined) {
@@ -303,13 +306,18 @@ function ResidualGraph(G) {
         //adds val to each edge on path
 
         //iterate through the path
-        for (j = 1; i < path.length; j++) {
+        for (j = 1; j < path.length; j++) {
             from = this.getIdIndex(path[j-1]);
             to = this.getIdIndex(path[j]);
-            if (from == undefined || to == undefined) {console.log('something went wrong...'); return;};
+            
+            if (from == undefined || to == undefined) {
+                console.log('something went wrong...');
+                return;
+            };
+            
             currentVal = this.adjMatrix[from][to];
-            this.adjMatrix[from][to] = this.adjMatrix[from][to] - val;
-            this.adjMatrix[to][from] = this.adjMatrix[to][from] + val;
+            this.adjMatrix[from][to] -= val;
+            this.adjMatrix[to][from] += val;
         };
     };
 };
@@ -319,8 +327,8 @@ function FordFulkerson(G, src, sink) {
 
     var RS = new ResidualGraph(G);
 
-    for (k = 0; k < 10; k++) {
-        path = BFS(RG, src, sink)['path'];
+    for (k = 0; k < 3; k++) {
+        path = BFS(RS, src, sink)['path'];
         console.log(path);
 
         if (path == {}) {
@@ -330,7 +338,7 @@ function FordFulkerson(G, src, sink) {
 
         //find min
         //console.log('FF found this path:',path);
-        var min = RG.minCapacity(path);
+        var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
     };
     //     p = RG.getPath()
@@ -380,9 +388,9 @@ G.addEdge("E", "F", 3);
 
 // Testing Residual Graph
 // G.print();
-RG = new ResidualGraph(G);
+// RG = new ResidualGraph(G);
 // RG.print();
 // G.print();
 // x = BFS(RG, "A", "F");
 // console.log(RG.getNeighbours("B"));
-FordFulkerson(RG, 'A', 'F');
+FordFulkerson(G, 'A', 'F');
