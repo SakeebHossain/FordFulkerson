@@ -394,4 +394,4 @@ G.addEdge("E", "F", 3);
 // G.print();
 // x = BFS(RG, "A", "F");
 // console.log(RG.getNeighbours("B"));
-FordFulkerson(G, 'A', 'F');
+FordFulkerson(G, 'A', 'G');
