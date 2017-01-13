@@ -227,7 +227,8 @@ function BFS(G, src, destination) {
             if (neighbours[i] == destination) {
                 return {
                     "path" : getPath(pred, src, destination),
-                    "dist" : dist[destination]
+                    "dist" : dist[destination],
+                    "visited" : visited
                     };
             };
             
@@ -241,7 +242,8 @@ function BFS(G, src, destination) {
     };
     return {
             "path" : [],
-            "dist" : 0
+            "dist" : 0,
+            "visited" : visited
             };
 };
 
@@ -306,7 +308,7 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        console.log("DEBUGGING",'found min to be', min);
+        //console.log("DEBUGGING",'found min to be', min);
         return min;
     };
 
@@ -336,16 +338,37 @@ function FordFulkerson(G, src, sink) {
     var RS = new ResidualGraph(G);
 
     while (true) {
-        path = BFS(RS, src, sink)['path'];
+        res = BFS(RS, src, sink);
+        path = res['path'];
+        //console.log("DEBUGGING", res['visited']); 
         if (path.length == 0) {
             break;
         };
 
+        //console.log("DEBUGGING",'FF found this path:',path);
         //find min
-        console.log("DEBUGGING",'FF found this path:',path);
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
     };
+    
+    S = res['visited'];
+    //visited now contains all nodes in the S part of the S-T cut. Find all out-going from them.
+    cut = new Set();
+    flow = 0;
+    for (k = 0; k < S.length; k++) {
+        var s = G.getNeighbours(S[k]);
+        x = G.getIdIndex(S[k]);
+        for (l = 0; l < s.length; l++) {
+            if (!S.includes(s[l])) {
+               cut.add([ S[k], s[l]]);
+               flow += G.adjMatrix[G.getIdIndex(S[k])][G.getIdIndex(s[l])];
+            };
+       };
+    };
+
+    console.log(flow);
+    console.log(cut);
+
 }; 
 
 //TESTS--------------------------------------------------------------------------------------------
