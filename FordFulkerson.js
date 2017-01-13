@@ -199,6 +199,7 @@ function BFS(G, src, destination) {
     
     pred = {};
     dist = {};
+    visited = [src];
     Q = new Queue();
 
     for (var node in G.idList) {
@@ -210,9 +211,8 @@ function BFS(G, src, destination) {
     dist[src] = 0; 
     count = 0
     while(Q.isEmpty() == false) {
-        console.log(Q.getContents());
-        count += 1
-        if (count == 15) {return;};
+        count += 1;
+        if (count == 10) {return;};
         var current = Q.dequeue();
 
         if (G.getNeighbours(current) == undefined) {
@@ -230,11 +230,19 @@ function BFS(G, src, destination) {
                     "dist" : dist[destination]
                     };
             };
-            Q.enqueue(neighbours[i]);
+            
+            //make sure we haven't visited the node already
+
+            if (!visited.includes(neighbours[i])) {
+                visited.push(neighbours[i]);
+                Q.enqueue(neighbours[i]);
+            };
         };
-        //console.log(Q.getContents());
     };
-    return {};
+    return {
+            "path" : [],
+            "dist" : 0
+            };
 };
 
 function getPath(pred, src, dest) {
@@ -298,7 +306,7 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        //console.log('found min to be', min);
+        console.log("DEBUGGING",'found min to be', min);
         return min;
     };
 
@@ -327,24 +335,17 @@ function FordFulkerson(G, src, sink) {
 
     var RS = new ResidualGraph(G);
 
-    for (k = 0; k < 3; k++) {
+    while (true) {
         path = BFS(RS, src, sink)['path'];
-        console.log(path);
-
-        if (path == {}) {
-            console.log("I blieve");
+        if (path.length == 0) {
             break;
         };
 
         //find min
-        //console.log('FF found this path:',path);
+        console.log("DEBUGGING",'FF found this path:',path);
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
     };
-    //     p = RG.getPath()
-    //     min = p.min()
-    //     RG.adjust(p, min) ---> if edge is not forward edge, incrase, else decrease
-
 }; 
 
 //TESTS--------------------------------------------------------------------------------------------
