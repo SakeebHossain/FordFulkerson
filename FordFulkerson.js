@@ -308,7 +308,7 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        //console.log("DEBUGGING",'found min to be', min);
+        console.log("DEBUGGING",'found min to be', min);
         return min;
     };
 
@@ -345,7 +345,7 @@ function FordFulkerson(G, src, sink) {
             break;
         };
 
-        //console.log("DEBUGGING",'FF found this path:',path);
+        console.log("DEBUGGING",'FF found this path:',path);
         //find min
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
@@ -375,46 +375,36 @@ function FordFulkerson(G, src, sink) {
 var G = new Graph();
 
 // // Testing Graph.addNode
-G.addNode("A");
-G.addNode("B");
-G.addNode("C");
-G.addNode("D");
-G.addNode("E");
-G.addNode("F");
-// G.addNode("B"); //should fail
-// G.print();
+G.addNode("s");
+G.addNode("2");
+G.addNode("3");
+G.addNode("4");
+G.addNode("5");
+G.addNode("6");
+G.addNode("7");
+G.addNode("t");
 
-// // Testing Graph.deleteNode
-// G.deleteNode("node2");
-// G.addEdge("A", "B", 4);
-// G.addEdge("A", "C", 3);
-// G.addEdge("B", "A", 1);
-G.addEdge("A", "B", 1);
-G.addEdge("A", "C", 8);
-G.addEdge("B", "C", 1);
-G.addEdge("B", "D", 6);
-G.addEdge("B", "E", 1);
-G.addEdge("C", "E", 1);
-G.addEdge("D", "F", 4);
-G.addEdge("E", "D", 8);
-G.addEdge("E", "F", 3);
-// G.print();
+G.addEdge("s", "2", 10);
+G.addEdge("s", "3", 5);
+G.addEdge("s", "4", 15);
 
-// Testing Graph.addEdge
-// G.addEdge("node2", "node4", 10);
-// G.print();
+G.addEdge("2", "3", 4);
+G.addEdge("2", "6", 15);
+G.addEdge("2", "5", 9);
 
-// Testing Graph.getNeighbours
-// console.log(G.getNeighbours("A"));
+G.addEdge("3", "4", 4);
+G.addEdge("3", "6", 8);
 
-// // Testing BFS
-// console.log(BFS(G, "A", "F"));
+G.addEdge("4", "7", 30);
 
-// Testing Residual Graph
-// G.print();
-// RG = new ResidualGraph(G);
-// RG.print();
-// G.print();
-// x = BFS(RG, "A", "F");
-// console.log(RG.getNeighbours("B"));
-FordFulkerson(G, 'A', 'F');
+G.addEdge("5", "6", 15);
+G.addEdge("5", "t", 10);
+
+G.addEdge("6", "7", 15);
+G.addEdge("6", "t", 10);
+
+G.addEdge("7", "t", 10);
+
+
+
+FordFulkerson(G, 's', 't');
