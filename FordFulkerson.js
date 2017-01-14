@@ -201,18 +201,18 @@ function BFS(G, src, destination) {
     dist = {};
     visited = [src];
     Q = new Queue();
-
-    for (var node in G.idList) {
-        pred[i] = undefined;
-        dist[i] = Infinity;
+    
+    for (q = 0; q < G.idList.length; q++) {
+        cur = G.idList[q];
+        pred[cur] = undefined;
+        dist[cur] = Infinity;
     }
 
     Q.enqueue(src);
     dist[src] = 0; 
-    count = 0
+
     while(Q.isEmpty() == false) {
-        count += 1;
-        if (count == 10) {return;};
+        console.log("DEBUGGING", Q.getContents().length);
         var current = Q.dequeue();
 
         if (G.getNeighbours(current) == undefined) {
@@ -221,20 +221,21 @@ function BFS(G, src, destination) {
 
         var neighbours = G.getNeighbours(current);
         for (i = 0; i < neighbours.length; i++) {
-            pred[neighbours[i]] = current;
-            dist[neighbours[i]] = dist[current] + 1;
-
-            if (neighbours[i] == destination) {
-                return {
-                    "path" : getPath(pred, src, destination),
-                    "dist" : dist[destination],
-                    "visited" : visited
-                    };
-            };
-            
-            //make sure we haven't visited the node already
-
             if (!visited.includes(neighbours[i])) {
+                pred[neighbours[i]] = current;
+                dist[neighbours[i]] = dist[current] + 1;
+
+                if (neighbours[i] == destination) {
+                    //console.log('DEBUGGING----------------------------')
+                    //console.log("DEBUGGING", pred);
+                    return {
+                        "path" : getPath(pred, src, destination),
+                        "dist" : dist[destination],
+                        "visited" : visited
+                    };
+                };
+                //make sure we haven't visited the node already
+
                 visited.push(neighbours[i]);
                 Q.enqueue(neighbours[i]);
             };
@@ -281,7 +282,7 @@ function ResidualGraph(G) {
         for (i = 0; i < G.adjMatrix.length; i++) {
             for (j = 0; j < G.adjMatrix[i].length; j++) {
                 if (i != j && G.adjMatrix[i][j] != -Infinity) {
-                    this.adjMatrix[j][i] = 0;  //question:... what about .updateEdge()?
+                    this.adjMatrix[j][i] = 0;
                 };
             };
         };
@@ -308,7 +309,7 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        console.log("DEBUGGING",'found min to be', min);
+        //console.log("DEBUGGING",'found min to be', min);
         return min;
     };
 
@@ -345,10 +346,11 @@ function FordFulkerson(G, src, sink) {
             break;
         };
 
-        console.log("DEBUGGING",'FF found this path:',path);
+        //console.log("DEBUGGING",'FF found this path:',path);
         //find min
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
+
     };
     
     S = res['visited'];
@@ -374,7 +376,6 @@ function FordFulkerson(G, src, sink) {
 //TESTS--------------------------------------------------------------------------------------------
 var G = new Graph();
 
-// // Testing Graph.addNode
 G.addNode("s");
 G.addNode("2");
 G.addNode("3");
@@ -406,5 +407,4 @@ G.addEdge("6", "t", 10);
 G.addEdge("7", "t", 10);
 
 
-
-FordFulkerson(G, 's', 't');
+FordFulkerson(G, "s", "t");
