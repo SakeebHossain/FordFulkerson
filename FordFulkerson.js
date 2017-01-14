@@ -212,7 +212,7 @@ function BFS(G, src, destination) {
     dist[src] = 0; 
 
     while(Q.isEmpty() == false) {
-        console.log("DEBUGGING", Q.getContents().length);
+        //console.log("DEBUGGING", Q.getContents().length);
         var current = Q.dequeue();
 
         if (G.getNeighbours(current) == undefined) {
@@ -338,6 +338,9 @@ function FordFulkerson(G, src, sink) {
 
     var RS = new ResidualGraph(G);
 
+    console.log("DEBGGING BEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEGGGGGGGGGGGGGGGGIN");
+    RS.print();
+
     while (true) {
         res = BFS(RS, src, sink);
         path = res['path'];
@@ -345,11 +348,14 @@ function FordFulkerson(G, src, sink) {
         if (path.length == 0) {
             break;
         };
-
-        //console.log("DEBUGGING",'FF found this path:',path);
+  
         //find min
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
+
+        console.log("DEBUGGING",'BFS found a min of', min, 'on this path:', path);
+        RS.print();
+
 
     };
     
@@ -365,7 +371,7 @@ function FordFulkerson(G, src, sink) {
                cut.add([ S[k], s[l]]);
                flow += G.adjMatrix[G.getIdIndex(S[k])][G.getIdIndex(s[l])];
             };
-       };
+        };
     };
 
     console.log(flow);
@@ -404,6 +410,7 @@ G.addEdge("5", "t", 10);
 G.addEdge("6", "7", 15);
 G.addEdge("6", "t", 10);
 
+G.addEdge("7", "3", 6);
 G.addEdge("7", "t", 10);
 
 
