@@ -1,169 +1,179 @@
-//Graph (using Adjacency matrix)------------------------------------------------------------------
+/*
+ * A graph that contains nodes and vertice, stored as an adjacency matrix.
+ * @constructor  
+ */
 function Graph() {
-    ////METHODS
-    this.adjMatrix = [];  //[i][j] : i is the name of the 'from' node and j is the 'to' node
-    this.idList = [];
+    this.adjMatrix = [];  // Once we add a node, this will also contain sub arrays. Edge weights are stored in [i][j], where i is the name of the 'from' node and j is the 'to' node
+    this.idList = [];  // The name associated with each node.
 };
 
-    Graph.prototype.addNode = function(id) {
-        //make sure id is unique
-        for (i = 0; i < this.idList.length; i++) {
-            if (this.idList[i] == id) {
-                console.log("A node with id", id, "already exists!");
-                return;
-            };
-        };
-        //initialize new row with -inf's based on len of idlist
-        var newRow = [];
-        for (i = 0; i < this.idList.length; i++) {
-            newRow[i] = -Infinity;
-        };
-        //add new row (append new list)
-        this.adjMatrix.push(newRow);
-        //add new id to idList
-        this.idList.push(id);
-        //add new columns in each row (go through each row in matrix, append -inf) to matrix
-        for (i = 0; i < this.idList.length; i++) {
-            this.adjMatrix[i].push(-Infinity);
+/*
+ * Adds a new node to the graph with name 'id'. 
+ */
+Graph.prototype.addNode = function(id) {
+    // Ensure the id provided is unique by seeing if it doesn't already exists in the idList.
+    for (i = 0; i < this.idList.length; i++) {
+        if (this.idList[i] == id) {
+            console.log("A node with id", id, "already exists!");
+            return;
         };
     };
 
-    Graph.prototype.deleteNode = function(id) {
-        var found = false;
-        var index;
+    // Initialize new row with -inf's based on len of idList.
+    var newRow = [];
+    for (i = 0; i < this.idList.length; i++) {
+        newRow[i] = -Infinity;
+    };
 
-        //confirm node exists
-        for (i = 0; i < this.idList.length; i++) {
-            if (this.idList[i] == id) {
-                    found = true;
-                    index = i;
-                    break;
-                };
-        };
+    // Add the newly made row to our graph's adjMatrix.
+    this.adjMatrix.push(newRow);
 
-        if (found == false) {
-            console.log("The node with id", id, "wasn't found.");
-            return;
-        };
+    // Add the id provided to our graph's idList
+    this.idList.push(id);
 
-        //if found, find its index in the idList, k
-        for (i = 0; i < this.adjMatrix.length; i++) {
-            if (this.idList[i] == id) {
+    // Add new column to each row in our adjMatrix. Do this by appending -Infinity to each row.
+    for (i = 0; i < this.idList.length; i++) {
+        this.adjMatrix[i].push(-Infinity);
+    };
+};
+
+
+Graph.prototype.deleteNode = function(id) {
+    var found = false;
+    var index;
+
+    //confirm node exists
+    for (i = 0; i < this.idList.length; i++) {
+        if (this.idList[i] == id) {
+                found = true;
                 index = i;
                 break;
-            }
-        };
-
-        //splice out the [index]th element in idList
-        this.idList.splice(index, 1);
-
-        //splice out the [index]th row in adjMatrix
-        this.adjMatrix.splice(index, 1);
-
-        //splice out [index]th element from all other arrays
-        for (i = 0; i < this.adjMatrix.length; i++) {
-            this.adjMatrix[i].splice(index, 1);
-        };
-    };
-
-    Graph.prototype.addEdge = function(id1, id2, weight) {
-    //NOTE: id1 is the 'from' node and id2 is the 'to' node
-    //confirm if id1 and id2 are found in idList, confirming nodes are in graph
-    //also find index of id1, i, and id2, j, in idList
-        found1 = false;
-        found2 = false;
-        var index1, index2;
-        for (i = 0; i < this.idList.length; i++) {
-            if (this.idList[i] == id1 || this.idList[i] == id2) {
-                if (this.idList[i] == id1) {found1 = true; index1 = i;};
-                if (this.idList[i] == id2) {found2 = true; index2 = i;};
             };
-        };
-
-        if ((found1 && found2) != true) {
-            console.log("One of the nodes you provided aren't in the graph, so the edge can't be made.");
-            return;
-        };
-        this.adjMatrix[index1][index2] = weight;
     };
 
-    Graph.prototype.updateEdge = function(id1, id2, newWeight) {
-        //NOTE : this method is the same as addEdge. Only added it for readability
-        this.addEdge(id1, id2, newWeight);
+    if (found == false) {
+        console.log("The node with id", id, "wasn't found.");
+        return;
     };
 
-    Graph.prototype.deleteEdge = function(id1, id2) {
-    //NOTE: id1 is the 'from' node and id2 is the 'to' node
-    //confirm if id1 and id2 are found in idList, confirming nodes are in graph
-    //also find index of id1, i, and id2, j, in idList
-        found1 = false;
-        found2 = false;
-        var index1, index2;
-        for (i = 0; i < this.idList.length; i++) {
-            if (this.idList[i] == id1 || this.idList[i] == id2) {
-                if (this.idList[i] == id1) {found1 = true; index1 = i;};
-                if (this.idList[i] == id2) {found2 = true; index2 = i;};
+    //if found, find its index in the idList, k
+    for (i = 0; i < this.adjMatrix.length; i++) {
+        if (this.idList[i] == id) {
+            index = i;
+            break;
+        }
+    };
+
+    //splice out the [index]th element in idList
+    this.idList.splice(index, 1);
+
+    //splice out the [index]th row in adjMatrix
+    this.adjMatrix.splice(index, 1);
+
+    //splice out [index]th element from all other arrays
+    for (i = 0; i < this.adjMatrix.length; i++) {
+        this.adjMatrix[i].splice(index, 1);
+    };
+};
+
+Graph.prototype.addEdge = function(id1, id2, weight) {
+//NOTE: id1 is the 'from' node and id2 is the 'to' node
+//confirm if id1 and id2 are found in idList, confirming nodes are in graph
+//also find index of id1, i, and id2, j, in idList
+    found1 = false;
+    found2 = false;
+    var index1, index2;
+    for (i = 0; i < this.idList.length; i++) {
+        if (this.idList[i] == id1 || this.idList[i] == id2) {
+            if (this.idList[i] == id1) {found1 = true; index1 = i;};
+            if (this.idList[i] == id2) {found2 = true; index2 = i;};
+        };
+    };
+
+    if ((found1 && found2) != true) {
+        console.log("One of the nodes you provided aren't in the graph, so the edge can't be made.");
+        return;
+    };
+    this.adjMatrix[index1][index2] = weight;
+};
+
+Graph.prototype.updateEdge = function(id1, id2, newWeight) {
+    //NOTE : this method is the same as addEdge. Only added it for readability
+    this.addEdge(id1, id2, newWeight);
+};
+
+Graph.prototype.deleteEdge = function(id1, id2) {
+//NOTE: id1 is the 'from' node and id2 is the 'to' node
+//confirm if id1 and id2 are found in idList, confirming nodes are in graph
+//also find index of id1, i, and id2, j, in idList
+    found1 = false;
+    found2 = false;
+    var index1, index2;
+    for (i = 0; i < this.idList.length; i++) {
+        if (this.idList[i] == id1 || this.idList[i] == id2) {
+            if (this.idList[i] == id1) {found1 = true; index1 = i;};
+            if (this.idList[i] == id2) {found2 = true; index2 = i;};
+        };
+    };
+
+    if ((found1 && found2) != true) {
+        console.log("One of the nodes you provided aren't in the graph, so the edge can't be made.");
+        return;
+    };
+    this.adjMatrix[index1][index2] = -Infinity;
+};
+    
+Graph.prototype.print = function() {
+    console.log("FROM\\TO", this.idList);
+    for (i = 0; i < this.adjMatrix.length; i++) {
+        console.log("'" + this.idList[i] + "'", this.adjMatrix[i], "\n");
+    };
+    console.log("\n");
+};
+
+//getedges() : returns a list of edges in the format (from, to)
+
+Graph.prototype.getIdIndex = function(id) {
+    for (i = 0; i < this.idList.length; i++) {
+        if (id == this.idList[i]) {
+            return i;
+        };
+    };
+    console.log("node with id", id, "doesn't exist in this graph.");
+    return undefined;
+};
+
+Graph.prototype.getNeighbours = function(id) {
+    //description : returns all nodes reachable from the provided node
+    //find index of id in idList 
+    var found = false;
+    var index;
+
+    //confirm node exists
+    for (i = 0; i < this.idList.length; i++) {
+        if (this.idList[i] == id) {
+                found = true;
+                index = i;
+                break;
             };
-        };
-
-        if ((found1 && found2) != true) {
-            console.log("One of the nodes you provided aren't in the graph, so the edge can't be made.");
-            return;
-        };
-        this.adjMatrix[index1][index2] = -Infinity;
     };
-        
-    Graph.prototype.print = function() {
-        console.log("FROM\\TO", this.idList);
-        for (i = 0; i < this.adjMatrix.length; i++) {
-            console.log("'" + this.idList[i] + "'", this.adjMatrix[i], "\n");
-        };
-        console.log("\n");
+    
+
+    //if it doesn't exist, tell 'em
+    if (found == false) {
+        console.log("The node with id", id, "wasn't found.");
+        return;
     };
 
-    //getedges() : returns a list of edges in the format (from, to)
-
-    Graph.prototype.getIdIndex = function(id) {
-        for (i = 0; i < this.idList.length; i++) {
-            if (id == this.idList[i]) {
-                return i;
-            };
+    //make array of neighbours
+    neighbours = [];
+    for (i = 0; i < this.adjMatrix[index].length; i++) {
+        if (this.adjMatrix[index][i] != -Infinity && this.adjMatrix[index][i] != 0) {  //if edge cap is 0, it can't carry flow, so it might as well not exist...
+            neighbours.push(this.idList[i]);
         };
-        console.log("node with id", id, "doesn't exist in this graph.");
-        return undefined;
     };
-
-    Graph.prototype.getNeighbours = function(id) {
-        //description : returns all nodes reachable from the provided node
-        //find index of id in idList 
-        var found = false;
-        var index;
-
-        //confirm node exists
-        for (i = 0; i < this.idList.length; i++) {
-            if (this.idList[i] == id) {
-                    found = true;
-                    index = i;
-                    break;
-                };
-        };
-        
-
-        //if it doesn't exist, tell 'em
-        if (found == false) {
-            console.log("The node with id", id, "wasn't found.");
-            return;
-        };
-
-        //make array of neighbours
-        neighbours = [];
-        for (i = 0; i < this.adjMatrix[index].length; i++) {
-            if (this.adjMatrix[index][i] != -Infinity && this.adjMatrix[index][i] != 0) {  //if edge cap is 0, it can't carry flow, so it might as well not exist...
-                neighbours.push(this.idList[i]);
-            };
-        };
-        return neighbours;
-    };
+    return neighbours;
+};
 
 //Queue--------------------------------------------------------------------------------------------
 function Queue() {
@@ -212,7 +222,6 @@ function BFS(G, src, destination) {
     dist[src] = 0; 
 
     while(Q.isEmpty() == false) {
-        //console.log("DEBUGGING", Q.getContents().length);
         var current = Q.dequeue();
 
         if (G.getNeighbours(current) == undefined) {
@@ -226,8 +235,6 @@ function BFS(G, src, destination) {
                 dist[neighbours[i]] = dist[current] + 1;
 
                 if (neighbours[i] == destination) {
-                    //console.log('DEBUGGING----------------------------')
-                    //console.log("DEBUGGING", pred);
                     return {
                         "path" : getPath(pred, src, destination),
                         "dist" : dist[destination],
@@ -259,9 +266,12 @@ function getPath(pred, src, dest) {
 };
 
 //Residual Graph-----------------------------------------------------------------------------------
-
+/*
+ * The residual graph which is generated based on a given Graph object. Used in FordFukerson().
+ * @constructor
+ * @extends {Graph}
+ */
 ResidualGraph.prototype = new Graph();
-
 function ResidualGraph(G) {
 
     this.adjMatrix = [];
@@ -309,7 +319,6 @@ function ResidualGraph(G) {
                 min = value;
             };
         };
-        //console.log("DEBUGGING",'found min to be', min);
         return min;
     };
 
@@ -338,13 +347,9 @@ function FordFulkerson(G, src, sink) {
 
     var RS = new ResidualGraph(G);
 
-    console.log("DEBGGING BEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEGGGGGGGGGGGGGGGGIN");
-    RS.print();
-
     while (true) {
         res = BFS(RS, src, sink);
-        path = res['path'];
-        //console.log("DEBUGGING", res['visited']); 
+        path = res['path']; 
         if (path.length == 0) {
             break;
         };
@@ -352,10 +357,6 @@ function FordFulkerson(G, src, sink) {
         //find min
         var min = RS.minCapacity(path);
         RS.adjustEdgesInPath(path, min);
-
-        console.log("DEBUGGING",'BFS found a min of', min, 'on this path:', path);
-        RS.print();
-
 
     };
     
@@ -374,14 +375,58 @@ function FordFulkerson(G, src, sink) {
         };
     };
 
-    console.log(flow);
-    console.log(cut);
+    console.log("MAX FLOW:", flow);
+    console.log("MIN CUT", cut);
 
 }; 
 
 //TESTS--------------------------------------------------------------------------------------------
 var G = new Graph();
 
+// //GRAPH ONE : Standard 
+// G.addNode("0");
+// G.addNode("1");
+// G.addNode("2");
+// G.addNode("3");
+// G.addNode("4");
+// G.addNode("5");
+
+// G.addEdge("0", "1", 16);
+// G.addEdge("0", "2", 13);
+
+// G.addEdge("1", "2", 10);
+// G.addEdge("1", "3", 12);
+
+// G.addEdge("2", "1", 4);
+// G.addEdge("2", "4", 14);
+
+// G.addEdge("3", "2", 9);
+// G.addEdge("3", "5", 20);
+
+// G.addEdge("4", "3", 7);
+// G.addEdge("4", "5", 4);
+
+// FordFulkerson(G, "0", "5");
+
+
+// //GRAPH TWO : FF Killer
+// G.addNode("0");
+// G.addNode("1");
+// G.addNode("2");
+// G.addNode("3");
+
+// G.addEdge("0", "1", 1000);
+// G.addEdge("0", "2", 1000);
+
+// G.addEdge("1", "3", 1000);
+
+// G.addEdge("2", "1", 1);
+// G.addEdge("2", "3", 1000);
+
+// FordFulkerson(G, "0", "3");
+
+
+// GRAPH THREE : PRINCETON
 G.addNode("s");
 G.addNode("2");
 G.addNode("3");
@@ -415,3 +460,5 @@ G.addEdge("7", "t", 10);
 
 
 FordFulkerson(G, "s", "t");
+
+
